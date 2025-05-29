@@ -30,9 +30,11 @@ class GPUDataGenerator:
             try:
                 # Initialize GPU and get device info
                 device = cp.cuda.Device()
-                meminfo = cp.cuda.MemoryInfo()
+                # Modern CuPy: use memory pool to get total memory
+                mempool = cp.get_default_memory_pool()
+                total_mem = mempool.total_bytes()
                 print(f"GPU Device: {device}")
-                print(f"GPU Memory: {meminfo.total / 1e9:.1f} GB total")
+                print(f"GPU Memory: {total_mem / 1e9:.1f} GB total")
             except Exception as e:
                 print(f"GPU initialization warning: {e}")
                 self.use_gpu = False
@@ -47,23 +49,19 @@ class GPUDataGenerator:
     def random_choice_vectorized(self, choices: List[Any], size: int, 
                                weights: Optional[List[float]] = None,
                                replace: bool = True) -> List[Any]:
-        """GPU-accelerated random choice with optional weights"""
+        """GPU-accelerated random choice with optional weights. Falls back to numpy for choice due to CuPy limitation."""
         if not choices:
             return []
-        
+        # CuPy does not implement random.choice, so always use numpy for this operation
         if weights is not None:
-            weights = self.xp.array(weights, dtype=float)
+            weights = np.array(weights, dtype=float)
             weights = weights / weights.sum()
-            
-        indices = self.xp.random.choice(
+        indices = np.random.choice(
             len(choices), 
             size=size, 
             p=weights if weights is not None else None,
             replace=replace
         )
-        
-        # Convert to numpy for indexing
-        indices = self.to_numpy(indices)
         return [choices[i] for i in indices]
     
     def random_uniform_vectorized(self, low: float, high: float, size: int) -> np.ndarray:

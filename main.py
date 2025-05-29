@@ -17,6 +17,7 @@ from data_generators import EcommerceDataPipeline
 from data_validation import DataValidator
 from gpu_utils import GPUDataGenerator
 
+VIEWS_PER_CUSTOMER_PER_DAY = 0.5
 
 def main(
     outdir: Path,
@@ -61,6 +62,8 @@ def main(
     print(f"\n{'='*40}")
     print("GENERATING DATASETS")
     print(f"{'='*40}")
+
+    avg_views_per_day = int(num_customers * VIEWS_PER_CUSTOMER_PER_DAY)
     
     datasets = pipeline.generate_full_dataset(
         num_customers=num_customers,
