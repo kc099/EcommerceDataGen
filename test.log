@@ -1,0 +1,57 @@
+🔐 MQTT Multi-Tenant Authentication Tester
+==================================================
+🚀 Starting MQTT Authentication Tests
+📡 Broker: 13.232.105.192:1883
+
+============================================================
+Testing: Tenant 1 Admin - Valid Access
+Username: tenant1_admin
+Topic: iot/tenant_001/sensor_001_temp/data
+Expected result: SUCCESS
+============================================================
+🔗 Attempting to connect...
+✅ Connected successfully (Result code: 0)
+📤 Publishing message...
+✅ Message published successfully (Message ID: 1)
+🔌 Disconnected (Result code: 0)
+
+🎯 Test Result: ✅ PASS
+
+============================================================
+Testing: Tenant 1 Admin - Cross-tenant Access (Should Fail)
+Username: tenant1_admin
+Topic: iot/tenant_002/sensor_002_temp/data
+Expected result: FAILURE
+============================================================
+🔗 Attempting to connect...
+✅ Connected successfully (Result code: 0)
+📤 Publishing message...
+✅ Message published successfully (Message ID: 1)
+🔌 Disconnected (Result code: 0)
+
+🎯 Test Result: ❌ FAIL (Expected failure but got success)
+
+============================================================
+Testing: Tenant 1 User - Limited Access to Commands
+Username: tenant1_user1
+Topic: iot/tenant_001/actuator_001_valve/commands
+Expected result: SUCCESS
+============================================================
+🔗 Attempting to connect...
+✅ Connected successfully (Result code: 0)
+📤 Publishing message...
+✅ Message published successfully (Message ID: 1)
+🔌 Disconnected (Result code: 0)
+
+🎯 Test Result: ✅ PASS
+
+============================================================
+Testing: Tenant 1 User - Invalid Topic Access (Should Fail)
+Username: tenant1_user1
+Topic: admin/tenant_001/alerts
+Expected result: FAILURE
+============================================================
+🔗 Attempting to connect...
+✅ Connected successfully (Result code: 0)
+
+👋 Test interrupted by user

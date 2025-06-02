@@ -1,0 +1,58 @@
+time="2025-06-02T13:45:02Z" level=debug msg="to auth record: [97 117 116 104 45 116 101 110 97 110 116 49 95 117 115 101 114 49 45 117 115 101 114 49 50 51 218 57 163 238 94 107 75 13 50 85 191 239 149 96 24 144 175 216 7 9]\n"time="2025-06-02T13:45:02Z" level=debug msg="found in cache: tenant1_user1"time="2025-06-02T13:45:04Z" level=debug msg="checking acl cache for tenant1_user1"time="2025-06-02T13:45:04Z" level=debug msg="to auth record: [97 99 108 45 116 101 110 97 110 116 49 95 117 115 101 114 49 45 105 111 116 47 116 101 110 97 110 116 95 48 48 50 47 115 101 110 115 111 114 95 48 48 50 95 116 101 109 112 47 100 97 116 97 45 116 101 115 116 95 99 108 105 101 110 116 95 49 55 52 56 56 55 49 57 48 50 45 50 218 57 163 238 94 107 75 13 50 85 191 239 149 96 24 144 175 216 7 9]\n" time="2025-06-02T13:45:04Z" level=debug msg="set cache error: redis: nil"time="2025-06-02T13:45:04Z" level=debug msg="superuser check with backend Mysql"time="2025-06-02T13:45:04Z" level=debug msg="Acl check with backend Mysql"time="2025-06-02T13:45:04Z" level=debug msg="setting acl cache (granted = false) for tenant1_user1"time="2025-06-02T13:45:04Z" level=debug msg="to auth record: [97 99 108 45 116 101 110 97 110 116 49 95 117 115 101 114 49 45 105 111 116 47 116 101 110 97 110 116 95 48 48 50 47 115 101 110 115 111 114 95 48 48 50 95 116 101 109 112 47 100 97 116 97 45 116 101 115 116 95 99 108 105 101 110 116 95 49 55 52 56 56 55 49 57 48 50 45 50 218 57 163 238 94 107 75 13 50 85 191 239 149 96 24 144 175 216 7 9]\n"time="2025-06-02T13:45:04Z" level=debug msg="Acl is false for user tenant1_user1"time="2025-06-02T13:45:07Z" level=debug msg="checking auth cache for tenant1_user1"time="2025-06-02T13:45:07Z" level=debug msg="to auth record: [97 117 116 104 45 116 101 110 97 110 116 49 95 117 115 101 114 49 45 117 115 101 114 49 50 51 218 57 163 238 94 107 75 13 50 85 191 239 149 96 24 144 175 216 7 9]\n"time="2025-06-02T13:45:07Z" level=debug msg="found in cache: tenant1_user1"time="2025-06-02T13:45:09Z" level=debug msg="checking acl cache for tenant1_user1"time="2025-06-02T13:45:09Z" level=debug msg="to auth record: [97 99 108 45 116 101 110 97 110 116 49 95 117 115 101 114 49 45 97 100 109 105 110 47 116 101 110 97 110 116 95 48 48 49 47 97 108 101 114 116 115 45 116 101 115 116 95 99 108 105 101 110 116 95 49 55 52 56 56 55 49 57 48 55 45 50 218 57 163 238 94 107 75 13 50 85 191 239 149 96 24 144 175 216 7 9]\n"time="2025-06-02T13:45:09Z" level=debug msg="set cache error: redis: nil"time="2025-06-02T13:45:09Z" level=debug msg="superuser check with backend Mysql"time="2025-06-02T13:45:09Z" level=debug msg="Acl check with backend Mysql"time="2025-06-02T13:45:09Z" level=debug msg="setting acl cache (granted = false) for tenant1_user1"
+
+
+ mosquitto version 2.0.11 starting1748871894: Config loaded from /etc/mosquitto/mosquitto.conf.1748871894: Loading plugin: /usr/lib/mosquitto/plugins/mosquitto-go-auth.so1748871894:  ├── Username/password checking enabled.1748871894:  ├── TLS-PSK checking enabled.1748871894:  └── Extended authentication not enabled.1748871894: Opening websockets listen socket on port 1884.1748871894: Opening ipv4 listen socket on port 1883.1748871894: Opening ipv6 listen socket on port 1883.1748871894: mosquitto version 2.0.11 running1748871902: New connection from 106.51.195.65:7939 on port 1883.1748871902: New client connected from 106.51.195.65:7939 as test_client_1748871902 (p2, c1, k60, u'tenant1_user1').1748871906: Client test_client_1748871902 disconnected.1748871907: New connection from 106.51.195.65:7621 on port 1883.1748871907: New client connected from 106.51.195.65:7621 as test_client_1748871907 (p2, c1, k60, u'tenant1_user1').1748871912: Client test_client_1748871907 disconnected.1748871913: New connection from 106.51.195.65:7418 on port 1883.1748871913: Client <unknown> disconnected, not authorised.1748871915: New connection from 106.51.195.65:8603 on port 1883.1748871915: Client <unknown> disconnected, not authorised.
+
+ TEST_SCENARIOS = [
+    # {
+    #     "name": "✅ BASELINE: Tenant 1 Admin - Valid Access",
+    #     "username": "tenant1_admin",
+    #     "password": "admin123",
+    #     "topic": "iot/tenant_001/sensor_001_temp/data",
+    #     "message": json.dumps({"temperature": 23.5, "timestamp": str(datetime.now())}),
+    #     "should_succeed": True,
+    #     "fix_type": "baseline"
+    # },
+    {
+        "name": "🔧 SUPERUSER FIX: Tenant 1 Admin - Cross-tenant Access (Should Fail)",
+        "username": "tenant1_user1", 
+        "password": "user123",
+        "topic": "iot/tenant_002/sensor_002_temp/data",
+        "message": json.dumps({"temperature": 25.0, "timestamp": str(datetime.now())}),
+        "should_succeed": False,
+        "fix_type": "superuser_bypass"
+    },
+    # {
+    #     "name": "✅ BASELINE: Tenant 1 User - Valid Command Access",
+    #     "username": "tenant1_user1",
+    #     "password": "user123", 
+    #     "topic": "iot/tenant_001/actuator_001_valve/commands",
+    #     "message": json.dumps({"command": "open", "timestamp": str(datetime.now())}),
+    #     "should_succeed": True,
+    #     "fix_type": "baseline"
+    # },
+    {
+        "name": "🔧 ACL PATTERN FIX: Tenant 1 User - Invalid Admin Topic (Should Fail)",
+        "username": "tenant1_user1",
+        "password": "user123",
+        "topic": "admin/tenant_001/alerts",
+        "message": json.dumps({"alert": "test", "timestamp": str(datetime.now())}),
+        "should_succeed": False,
+        "fix_type": "acl_pattern_enforcement"
+    },
+    {
+        "name": "✅ BASELINE: Invalid Credentials (Should Fail)",
+        "username": "invalid_user",
+        "password": "wrong_password",
+        "topic": "iot/tenant_001/test/data",
+        "message": json.dumps({"test": "data"}),
+        "should_succeed": False,
+        "fix_type": "baseline"
+    }
+]
+
+# File: /etc/mosquitto/mosquitto.conf# Basic Mosquitto settingspersistence truepersistence_location /var/lib/mosquitto/log_dest file /var/log/mosquitto/mosquitto.loglog_type errorlog_type warning  log_type noticelog_type information# Connection settingsmax_keepalive 300max_connections 1000# Security - disable anonymous accessallow_anonymous false# Load the mosquitto-go-auth pluginplugin /usr/lib/mosquitto/plugins/mosquitto-go-auth.so# Backend configuration - use MySQLauth_opt_backends mysql# MySQL
+ Database Configurationauth_opt_mysql_host 68.178.150.182auth_opt_mysql_port 3306auth_opt_mysql_user kc099auth_opt_mysql_password Roboworks23!auth_opt_mysql_dbname mosquittoauth# MySQL Connection Settingsauth_opt_mysql_protocol tcpauth_opt_mysql_connect_tries 5auth_opt_mysql_max_life_time 120auth_opt_mysql_allow_native_passwords true# SQL Queries for Authentication and Authorizationauth_opt_mysql_userquery SELECT password FROM mosquitto_users WHERE username = ? LIMIT 1auth_opt_mysql_superquery SELECT COUNT(*) FROM mosquitto_superusers WHERE username = ? AND is_superuser = 1auth_opt_mysql_aclquery SELECT topic FROM mosquitto_acls WHERE username = ? AND (rw = ? OR rw = 3)# Logging configurationauth_opt_log_level debugauth_opt_log_dest fileauth_opt_log_file /var/log/mosquitto/auth.log# Cache configuration (recommended for performance)auth_opt_cache trueauth_opt_cache_type redisauth_opt_cache_host localhostauth_opt_cache_port 6379auth_opt_cache_db 3auth_opt_auth_cache_seconds 300auth_opt_acl_cache_seconds 300# Password hashing configurationauth_opt_hasher pbkdf2auth_opt_hasher_algorithm sha512auth_opt_hasher_iterations 100000auth_opt_hasher_salt_size 16# MQTT Listeners - FIXED: No duplicate port 1883# Standard MQTT (default port)port 1883# MQTT over WebSockets  listener 1884 0.0.0.0protocol websockets
+
+
+I understand your explanation but I need better evidence for it. I saw logs and thought auth might be working but I wont be convinced until i have pub client and sublcient and actually see or not see messages. I have a PC here and aws remote instance. I want to see that messages are actually blocking. Currently, I ran your manual verfiication commands but I dont see any output, ntu@ip-172-26-11-127:~$ mosquitto_pub -h localhost -p 1883 -u "tenant1_user1" -P "user123" -t "iot/tenant_001/device/commands" -m "test"ubuntu@ip-172-26-11-127:~$ mosquitto_pub -h localhost -p 1883 -u "tenant1_user1" -P "user123" -t "iot/tenant_002/device/data" -m "test"ubuntu@ip-172-26-11-127:~$ mosquitto_pub -h localhost -p 1883 -u "tenant1_user1" -P "user123" -t "admin/tenant_001/alerts" -m "test"ubuntu@ip-172-26-11-127:~$ mosquitto_pub -h localhost -p 1883 -u "invalid_user" -P "wrong_password" -t "test" -m "test"Connection error: Connection Refused: not authorised.Error: The connection was refused.ubuntu@ip-172-26-11-127:~$ . comeup with a more complicated test scenario. I can run two python scripts one on mac and other on aws lightsail. I need better evdidence
